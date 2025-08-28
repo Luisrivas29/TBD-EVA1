@@ -1,0 +1,162 @@
+Microsoft Windows [Versión 10.0.26100.4946]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+C:\Users\raulr>mysqlsh
+MySQL Shell 8.0.42
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 23
+Server version: 8.0.42 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| prueba             |
+| sakila             |
+| sys                |
+| tbd1               |
+| world              |
++--------------------+
+8 rows in set (0.0201 sec)
+ MySQL  localhost:3306 ssl  SQL > use tbd1;
+Default schema set to `tbd1`.
+Fetching global names, object names from `tbd1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd1  SQL > show tables;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| persona        |
++----------------+
+1 row in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc table persona;
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+| id | select_type | table   | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+|  1 | SIMPLE      | persona | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    1 |      100 | NULL  |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------+
+1 row in set, 1 warning (0.0315 sec)
+Note (code 1003): /* select#1 */ select `tbd1`.`persona`.`id` AS `id`,`tbd1`.`persona`.`nombre` AS `nombre`,`tbd1`.`persona`.`apellidos` AS `apellidos` from `tbd1`.`persona`
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc persona;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | YES  |     | NULL    |       |
+| nombre    | varchar(50) | YES  |     | NULL    |       |
+| apellidos | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.0247 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > show create table persona;
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                     |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| persona | CREATE TABLE `persona` (
+  `id` int DEFAULT NULL,
+  `nombre` varchar(50) DEFAULT NULL,
+  `apellidos` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0250 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table customer(cust-id int, cust-name varchar(50), address varchar(100), phone varchar(15));
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-id int, cust-name varchar(50), address varchar(100), phone varchar(15))' at line 1
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table customer(cust_id int, cust_name varchar(50), address varchar(100), phone varchar(15));
+Query OK, 0 rows affected (0.0631 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > use customer;
+MySQL Error 1049: Unknown database 'customer'
+ MySQL  localhost:3306 ssl  tbd1  SQL > show tables;
++----------------+
+| Tables_in_tbd1 |
++----------------+
+| customer       |
+| persona        |
++----------------+
+2 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc customer;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| cust_id   | int          | YES  |     | NULL    |       |
+| cust_name | varchar(50)  | YES  |     | NULL    |       |
+| address   | varchar(100) | YES  |     | NULL    |       |
+| phone     | varchar(15)  | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.0266 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > drop table customer;
+Query OK, 0 rows affected (0.0379 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table customer(cust_id int not null, cust_name varchar(50) not null, address varchar(100) null, phone varchar(15) null);
+Query OK, 0 rows affected (0.0443 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc customer;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| cust_id   | int          | NO   |     | NULL    |       |
+| cust_name | varchar(50)  | NO   |     | NULL    |       |
+| address   | varchar(100) | YES  |     | NULL    |       |
+| phone     | varchar(15)  | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > drop table customer;
+Query OK, 0 rows affected (0.0345 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table customer(cust_id int not null auto_increment, cust_name varchar(50) not null, address varchar(100) null, phone varchar(15) null);
+ERROR: 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table customer(cust_id int not null auto_increment key, cust_name varchar(50) not null, address varchar(100) null, phone varchar(15) null);
+Query OK, 0 rows affected (0.0451 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc customer;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| cust_id   | int          | NO   | PRI | NULL    | auto_increment |
+| cust_name | varchar(50)  | NO   |     | NULL    |                |
+| address   | varchar(100) | YES  |     | NULL    |                |
+| phone     | varchar(15)  | YES  |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.0025 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table student(name varchar(50) not null, ssn int not null, home_phone varchar(15) null, address varchar(100) null, office_phone varchar(15) null, age int null, gpa decimal(5,2) null);
+Query OK, 0 rows affected (0.0448 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc student;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| name         | varchar(50)  | NO   |     | NULL    |       |
+| ssn          | int          | NO   |     | NULL    |       |
+| home_phone   | varchar(15)  | YES  |     | NULL    |       |
+| address      | varchar(100) | YES  |     | NULL    |       |
+| office_phone | varchar(15)  | YES  |     | NULL    |       |
+| age          | int          | YES  |     | NULL    |       |
+| gpa          | decimal(5,2) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+7 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table student(name varchar(50) not null, ssn int not null key, home_phone varchar(15) null, address varchar(100) null, office_phone varchar(15) null, age int null, gpa decimal(5,2) null);
+ERROR: 1050 (42S01): Table 'student' already exists
+ MySQL  localhost:3306 ssl  tbd1  SQL > drop table student;
+Query OK, 0 rows affected (0.0122 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > create table student(name varchar(50) not null, ssn int not null key, home_phone varchar(15) null, address varchar(100) null, office_phone varchar(15) null, age int null, gpa decimal(5,2) null);
+Query OK, 0 rows affected (0.0432 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc studnet;
+ERROR: 1146 (42S02): Table 'tbd1.studnet' doesn't exist
+ MySQL  localhost:3306 ssl  tbd1  SQL > desc student;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| name         | varchar(50)  | NO   |     | NULL    |       |
+| ssn          | int          | NO   | PRI | NULL    |       |
+| home_phone   | varchar(15)  | YES  |     | NULL    |       |
+| address      | varchar(100) | YES  |     | NULL    |       |
+| office_phone | varchar(15)  | YES  |     | NULL    |       |
+| age          | int          | YES  |     | NULL    |       |
+| gpa          | decimal(5,2) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+7 rows in set (0.0028 sec)
+ MySQL  localhost:3306 ssl  tbd1  SQL >
